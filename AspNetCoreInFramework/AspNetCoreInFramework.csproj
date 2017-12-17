@@ -286,7 +286,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="IISHandler.cs" />
     <Compile Include="IISHandlerServer.cs" />
     <Compile Include="IISHttpRequestFeature.cs" />
@@ -294,7 +293,6 @@
     <Compile Include="OwinServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OwinStartup.cs" />
-    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AspNetStandard\AspNetStandard.csproj">

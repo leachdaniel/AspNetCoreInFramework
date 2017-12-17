@@ -27,7 +27,7 @@ namespace AspNetCoreInFramework
                     services.AddSingleton<IServer>(server);
                 })
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseStartup<Startup>()
+                .UseStartup<AspNetStandard.Startup>()
                 .Build();
 
             builder.Use(new Func<Func<IDictionary<string, object>, Task>, Func<IDictionary<string, object>, Task>>(ignoredNextApp => server.Invoke));
