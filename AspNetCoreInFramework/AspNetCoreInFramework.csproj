@@ -116,6 +116,9 @@
     <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures, Version=2.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Mvc.ViewFeatures.2.0.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.Owin, Version=2.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Owin.2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNetCore.ResponseCaching.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.ResponseCaching.Abstractions.2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.ResponseCaching.Abstractions.dll</HintPath>
     </Reference>
@@ -283,10 +286,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IISHandler.cs" />
-    <Compile Include="IISHandlerServer.cs" />
-    <Compile Include="IISHttpRequestFeature.cs" />
-    <Compile Include="IISHttpResponseFeature.cs" />
     <Compile Include="OwinServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OwinStartup.cs" />
@@ -295,10 +294,6 @@
     <ProjectReference Include="..\AspNetStandard\AspNetStandard.csproj">
       <Project>{457d6a60-6038-4ae2-b0d3-e94495b699e1}</Project>
       <Name>AspNetStandard</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HttpAbstractions\src\Microsoft.AspNetCore.Owin\Microsoft.AspNetCore.Owin.csproj">
-      <Project>{59BED991-F207-48ED-B24C-0A1D9C986C01}</Project>
-      <Name>Microsoft.AspNetCore.Owin</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
