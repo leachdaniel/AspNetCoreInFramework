@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Owin;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Owin;
-using Nowin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,14 +33,24 @@ namespace AspNetCoreInFramework
             // Ideally we should ensure this method is fired before disposing the context. 
             Invoke = async env =>
             {
+                // try without wrapping aspnet trys to add so it doesn't work
+                // var features = new OwinFeatureCollection(env);
+
                 // The reason for 2 level of wrapping is because the OwinFeatureCollection isn't mutable
                 // so features can't be added
-                var features = new FeatureCollection(new OwinFeatureCollection(env));
+                var owinFeatures = new OwinFeatureCollection(env);
 
+                // enumerating the env owin.ResponseHeaders causes Content-Type to default to text/html which messes up content negotiation
+                // set it to empty so AspNetCore can decide the final Content-Type
+                owinFeatures.Get<IHttpResponseFeature>().Headers["Content-Type"] = "";
+
+                var features = new FeatureCollection(owinFeatures);
+                
                 var context = application.CreateContext(features);
+
                 try
                 {
-                    await application.ProcessRequestAsync(context).ConfigureAwait(false);
+                    await application.ProcessRequestAsync(context);
                 }
                 catch (Exception ex)
                 {

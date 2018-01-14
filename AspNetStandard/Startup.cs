@@ -23,8 +23,9 @@ namespace AspNetStandard
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore()
-                .AddJsonFormatters();
+            services.AddMvcCore(options => options.ReturnHttpNotAcceptable = false)
+                .AddJsonFormatters()
+                .AddFormatterMappings();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,8 +36,13 @@ namespace AspNetStandard
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
-                
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
         }
     }
 }

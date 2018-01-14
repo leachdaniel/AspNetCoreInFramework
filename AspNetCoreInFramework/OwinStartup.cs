@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Owin;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Debug;
 
 // http://aspnet.codeplex.com/SourceControl/latest#Samples/Katana/HelloWorldRawOwin/Startup.cs
 
@@ -15,7 +17,7 @@ namespace AspNetCoreInFramework
 {
     // Note: By default all requests go through this OWIN pipeline. Alternatively you can turn this off by adding an appSetting owin:AutomaticAppStartup with value “false”. 
     // With this turned off you can still have OWIN apps listening on specific routes by adding routes in global.asax file using MapOwinPath or MapOwinRoute extensions on RouteTable.Routes
-    
+
     public class OwinStartup
     {
         // Invoked once at startup to configure your application.
@@ -27,6 +29,43 @@ namespace AspNetCoreInFramework
                     services.AddSingleton<IServer>(server);
                 })
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+
+                    config.AddInMemoryCollection(new Dictionary<string, string>()
+                    {
+                        ["Logging"] = @"{
+                                ""IncludeScopes"": false,
+                                ""LogLevel"": {
+                                ""Default"": ""Debug"",
+                                ""System"": ""Information"",
+                                ""Microsoft"": ""Information""
+                        }"
+                    });
+
+                    /*config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                            */
+                    /*if (env.IsDevelopment())
+                    {
+                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                        if (appAssembly != null)
+                        {
+                            config.AddUserSecrets(appAssembly, optional: true);
+                        }
+                    }*/
+
+                    config.AddEnvironmentVariables();
+                })
+                .UseDefaultServiceProvider((context, options) =>
+                {
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                })
+                 .ConfigureLogging((hostingContext, logging) =>
+                 {
+                     // logging.AddDebug();
+                 })
                 .UseStartup<AspNetStandard.Startup>()
                 .Build();
 
@@ -35,8 +74,8 @@ namespace AspNetCoreInFramework
             runTask = aspNetCoreHost.RunAsync();
         }
 
-        private static OwinServer server = new OwinServer();
-        private static IWebHost aspNetCoreHost;
+        private OwinServer server = new OwinServer();
+        private IWebHost aspNetCoreHost;
         private Task runTask;
     }
 }
